@@ -1,0 +1,35 @@
+# AI Service Dependencies
+
+# Web Framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+
+# OCR
+pytesseract>=0.3.10
+Pillow>=10.2.0
+opencv-python>=4.9.0
+
+# PDF Processing
+PyPDF2>=3.0.1
+pdfplumber>=0.10.3
+
+# AI/ML
+openai>=1.10.0
+anthropic>=0.18.0
+google-cloud-vision>=3.5.0
+
+# Embeddings & Search
+sentence-transformers>=2.3.0
+faiss-cpu>=1.7.4
+
+# NLP
+spacy>=3.7.0
+nltk>=3.8.1
+
+# Utilities
+python-multipart>=0.0.6
+httpx>=0.26.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.23.0

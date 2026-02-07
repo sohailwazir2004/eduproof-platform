@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+.Python
+*.so
+venv/
+ENV/
+*.egg-info/
+*.db
+*.sqlite
+*.log
+
+# Node
+node_modules/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+.DS_Store
+
+# Database
+eduproof.db
+*.sqlite3
+
+# Logs
+*.log
+server.log
+
+# OS
+Thumbs.db
+
+# Uploads
+uploads/
+media/
+
+# Task outputs
+tasks/
+*.output

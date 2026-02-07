@@ -1,0 +1,14 @@
+/* index.css - Global Styles
+ *
+ * Tailwind CSS imports and custom global styles.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles */
+
+/* TODO: Add custom font imports */
+/* TODO: Add custom base styles */
+/* TODO: Add custom component classes */

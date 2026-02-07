@@ -1,0 +1,58 @@
+# docker-compose.yml - Local Development
+#
+# Docker Compose for local development environment.
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: eduproof
+      POSTGRES_PASSWORD: eduproof_dev
+      POSTGRES_DB: eduproof
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Redis (for caching/queues)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  # Backend API
+  backend:
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://eduproof:eduproof_dev@db:5432/eduproof
+    depends_on:
+      - db
+      - redis
+
+  # AI Service
+  ai:
+    build:
+      context: ../../ai
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+
+  # Frontend (development)
+  frontend:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../../frontend/src:/app/src
+
+volumes:
+  postgres_data:
