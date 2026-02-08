@@ -24,8 +24,8 @@ class UserRole(str, Enum):
     ADMIN = "admin"
 
 
-# Password hashing context using bcrypt
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password hashing context using argon2 (more modern and compatible with Python 3.13)
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 # OAuth2 scheme for token authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.api_v1_prefix}/auth/login")
@@ -41,6 +41,9 @@ def hash_password(password: str) -> str:
     Returns:
         Hashed password string
     """
+    # Truncate password to 72 bytes for bcrypt
+    if len(password.encode('utf-8')) > 72:
+        password = password[:72]
     return pwd_context.hash(password)
 
 

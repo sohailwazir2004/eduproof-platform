@@ -285,6 +285,6 @@ git push origin master
 
 ---
 
-**🎉 Your EduProof platform is ready to be shared on GitHub!**
+**🎉 Your EduPro platform is ready to be shared on GitHub!**
 
 Just provide your GitHub username and run the push commands above.

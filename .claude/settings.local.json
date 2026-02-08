@@ -12,7 +12,13 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(gh --version:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(docker:*)",
+      "Bash(docker-compose:*)",
+      "Bash(systeminfo:*)",
+      "Bash(findstr:*)",
+      "Bash(node:*)",
+      "Bash(pip install:*)"
     ]
   }
 }

@@ -105,6 +105,10 @@ class SchoolClass(Base, UUIDMixin, TimestampMixin):
         secondary=teacher_classes,
         back_populates="classes"
     )
+    textbooks: Mapped[List["Textbook"]] = relationship(
+        "Textbook",
+        back_populates="school_class"
+    )
     homework_assignments: Mapped[List["Homework"]] = relationship(
         "Homework",
         back_populates="school_class"
