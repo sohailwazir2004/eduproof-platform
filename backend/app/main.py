@@ -1,16 +1,10 @@
-# main.py - FastAPI Application Entry Point
+# backend/app/main.py - FastAPI Application Entry Point
 #
-# This file initializes the FastAPI app, registers routers,
-# configures middleware, and sets up event handlers.
-
-"""
-EduProof API - Main Application Entry Point
-
-Usage:
-    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-"""
+# Production-ready version for Railway deployment
 
 from contextlib import asynccontextmanager
+import os
+
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -33,7 +27,7 @@ async def lifespan(app: FastAPI):
     """
     # Startup
     print(f"Starting {settings.app_name}...")
-    await init_db()
+    await init_db()  # Make sure init_db uses DATABASE_URL from env
     print("Database initialized successfully")
     yield
     # Shutdown
@@ -55,10 +49,10 @@ app = FastAPI(
 )
 
 
-# Configure CORS
+# Configure CORS - restrict origins in production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.all_cors_origins,
+    allow_origins=settings.all_cors_origins or ["*"],  # Replace "*" with actual frontend URL in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -68,7 +62,6 @@ app.add_middleware(
 # Exception handlers
 @app.exception_handler(AppException)
 async def app_exception_handler(request: Request, exc: AppException):
-    """Handle custom application exceptions."""
     return JSONResponse(
         status_code=exc.status_code,
         content={
@@ -84,7 +77,6 @@ async def app_exception_handler(request: Request, exc: AppException):
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    """Handle Pydantic validation errors."""
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content={
@@ -100,7 +92,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.exception_handler(SQLAlchemyError)
 async def database_exception_handler(request: Request, exc: SQLAlchemyError):
-    """Handle database errors."""
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={
@@ -117,7 +108,6 @@ async def database_exception_handler(request: Request, exc: SQLAlchemyError):
 # Health check endpoint
 @app.get("/health", tags=["Health"])
 async def health_check():
-    """Check if the API is running."""
     return {
         "status": "healthy",
         "app": settings.app_name,
@@ -126,54 +116,23 @@ async def health_check():
 
 
 # Include routers
-app.include_router(
-    auth.router,
-    prefix=f"{settings.api_v1_prefix}/auth",
-    tags=["Authentication"]
-)
-
-app.include_router(
-    users.router,
-    prefix=f"{settings.api_v1_prefix}/users",
-    tags=["Users"]
-)
-
-app.include_router(
-    homework.router,
-    prefix=f"{settings.api_v1_prefix}/homework",
-    tags=["Homework"]
-)
-
-app.include_router(
-    submissions.router,
-    prefix=f"{settings.api_v1_prefix}/submissions",
-    tags=["Submissions"]
-)
-
-app.include_router(
-    textbooks.router,
-    prefix=f"{settings.api_v1_prefix}/textbooks",
-    tags=["Textbooks"]
-)
-
-app.include_router(
-    classes.router,
-    prefix=f"{settings.api_v1_prefix}/classes",
-    tags=["Classes"]
-)
-
-app.include_router(
-    analytics.router,
-    prefix=f"{settings.api_v1_prefix}/analytics",
-    tags=["Analytics"]
-)
+app.include_router(auth.router, prefix=f"{settings.api_v1_prefix}/auth", tags=["Authentication"])
+app.include_router(users.router, prefix=f"{settings.api_v1_prefix}/users", tags=["Users"])
+app.include_router(homework.router, prefix=f"{settings.api_v1_prefix}/homework", tags=["Homework"])
+app.include_router(submissions.router, prefix=f"{settings.api_v1_prefix}/submissions", tags=["Submissions"])
+app.include_router(textbooks.router, prefix=f"{settings.api_v1_prefix}/textbooks", tags=["Textbooks"])
+app.include_router(classes.router, prefix=f"{settings.api_v1_prefix}/classes", tags=["Classes"])
+app.include_router(analytics.router, prefix=f"{settings.api_v1_prefix}/analytics", tags=["Analytics"])
 
 
+# Production-ready Uvicorn start
 if __name__ == "__main__":
     import uvicorn
+
+    port = int(os.environ.get("PORT", 8000))  # Use Railway port
     uvicorn.run(
         "app.main:app",
         host="0.0.0.0",
-        port=8000,
-        reload=settings.debug
+        port=port,
+        reload=False  # Always False in production
     )
