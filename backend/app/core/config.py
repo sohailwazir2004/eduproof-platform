@@ -3,6 +3,7 @@
 # Manages environment variables and application settings
 # using Pydantic Settings for type-safe configuration.
 
+import os
 from typing import Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
@@ -55,7 +56,17 @@ class Settings(BaseSettings):
     smtp_password: Optional[str] = None
 
     # CORS
+    # Add production frontend URLs here
     cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5173"]
+
+    @property
+    def all_cors_origins(self) -> list[str]:
+        """Get all CORS origins including environment variable"""
+        origins = self.cors_origins.copy()
+        frontend_url = os.getenv("FRONTEND_URL")
+        if frontend_url and frontend_url not in origins:
+            origins.append(frontend_url)
+        return origins
 
     model_config = SettingsConfigDict(
         env_file=".env",

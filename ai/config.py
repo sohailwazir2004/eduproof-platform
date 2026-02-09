@@ -13,5 +13,23 @@ Settings:
 - MODEL_CACHE_DIR
 """
 
-# TODO: Create Settings class with pydantic
-# TODO: Load from environment variables
+import os
+from pathlib import Path
+
+# LLM API Keys
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+
+# Google Cloud
+GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+# OCR
+TESSERACT_PATH = os.getenv("TESSERACT_PATH", "/usr/bin/tesseract")
+
+# Model Cache
+MODEL_CACHE_DIR = os.getenv("MODEL_CACHE_DIR", "./models/cache")
+Path(MODEL_CACHE_DIR).mkdir(parents=True, exist_ok=True)
+
+# Service Config
+AI_SERVICE_PORT = int(os.getenv("AI_SERVICE_PORT", "8001"))
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")

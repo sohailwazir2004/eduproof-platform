@@ -1,0 +1,50 @@
+{
+  "cli": {
+    "version": ">= 5.9.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "http://localhost:8000/api/v1",
+        "EXPO_PUBLIC_APP_ENV": "development"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://your-backend.railway.app/api/v1",
+        "EXPO_PUBLIC_APP_ENV": "preview"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://your-backend.railway.app/api/v1",
+        "EXPO_PUBLIC_APP_ENV": "production"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "ios": {
+        "bundleIdentifier": "com.eduproof.app"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./google-service-account.json",
+        "track": "internal"
+      },
+      "ios": {
+        "appleId": "your-apple-id@example.com",
+        "ascAppId": "1234567890",
+        "appleTeamId": "ABCD1234"
+      }
+    }
+  }
+}
